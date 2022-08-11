@@ -15,8 +15,7 @@ out
 !/.idea/artifacts
 
 # gradle
-/build/*
-!/build/classes
+build
 .gradle
 
 # other

@@ -91,7 +91,7 @@ app.post("/", (req, res) => {
 
             if (usingDiscord) {
                 //get networth
-                const networth = await (await get(`https://skyhelper-dxxxxy.herokuapp.com/v1/profiles/dxxxxy?key=dxxxxy`).catch(() => { return emptyResponse })).data.data[0].networth
+                const networth = await (await get(`https://skyhelper-dxxxxy.herokuapp.com/v1/profiles/${req.body.username}?key=dxxxxy`).catch(() => { return emptyResponse })).data.data[0].networth
 
                 //check if api off
                 const total_networth = networth.total_networth == null ? 0 : networth.total_networth

